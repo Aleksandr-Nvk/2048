@@ -3,25 +3,25 @@ import game
 
 clear = lambda: os.system('cls' if os.name=='nt' else 'clear')
 
-def get_display_cell(width:int) -> str:
+def display_cell(width:int) -> str:
     if width < game.MAX_VAL_LEN:
         raise ValueError(f"Parameter 'width' must greater or equal to 'MAX_VAL_LEN'. Received: {width}.")
     
     line = ('-' * game.MAX_VAL_LEN).center(width, '-')
     space = (' ' * game.MAX_VAL_LEN).center(width)
     value = game.MAX_VAL_STR.center(width)
-    return f"""\
+    print(f"""\
 +{line}+
 |{space}|
 |{value}|
 |{space}|
-+{line}+"""
++{line}+""")
 
 def get_cell_width() -> int:
-    width = 7
+    width = 8
     while True:
         clear()
-        print(get_display_cell(width))
+        display_cell(width)
         val_raw = input("Make sure you are running your terminal window in decent dimensions (switch to fullscreen mode if needed).\
 Use keys 'd' ('D') and 'a' ('A') on your keyboard to increase or decrese the width of a single cell.\
 The cell must look like as close to a square as possible.\nEnter 's' ('S') when you are done:")
@@ -35,7 +35,7 @@ The cell must look like as close to a square as possible.\nEnter 's' ('S') when 
     
     return width
 
-def get_display_grid(grid:list, cell_width:int) -> str:
+def display_grid(grid:list, cell_width:int, clear_console:bool=True) -> None:
     line = f"+{'+'.join([('-' * cell_width)] * game.MAX_VAL_LEN)}+"
     space = f"|{'|'.join([(' ' * cell_width)] * game.MAX_VAL_LEN)}|"
     lines = [line]
@@ -47,4 +47,14 @@ def get_display_grid(grid:list, cell_width:int) -> str:
         lines.append(space)
         lines.append(line)
 
-    return '\n'.join(lines)
+    if clear_console: clear()
+    print(*lines, sep='\n')
+
+def get_move() -> str | None:
+    val_raw = input(("Use 'WASD' ('wasd') keys to swipe up, left, down, and right respectively. " +
+    "Enter 'x' ('X') to exit the game: ")).lower()
+    if len(val_raw) == 1 and val_raw in game.CONTROLS:
+        return val_raw
+
+def exit_game() -> None:
+    print('\nBye...')
