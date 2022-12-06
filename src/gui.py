@@ -1,21 +1,27 @@
 import os
-import game
+import config
+
+MAX_VAL_STR = str(config.MAX_VAL)
+MAX_VAL_LEN = len(MAX_VAL_STR)
+
 
 clear = lambda: os.system('cls' if os.name=='nt' else 'clear')
 
+
 def display_cell(width:int) -> str:
-    if width < game.MAX_VAL_LEN:
+    if width < MAX_VAL_LEN:
         raise ValueError(f"Parameter 'width' must greater or equal to 'MAX_VAL_LEN'. Received: {width}.")
     
-    line = ('-' * game.MAX_VAL_LEN).center(width, '-')
-    space = (' ' * game.MAX_VAL_LEN).center(width)
-    value = game.MAX_VAL_STR.center(width)
+    line = ('-' * MAX_VAL_LEN).center(width, '-')
+    space = (' ' * MAX_VAL_LEN).center(width)
+    value = MAX_VAL_STR.center(width)
     print(f"""\
 +{line}+
 |{space}|
 |{value}|
 |{space}|
 +{line}+""")
+
 
 def get_cell_width() -> int:
     width = 8
@@ -26,7 +32,7 @@ def get_cell_width() -> int:
 Use keys 'd' ('D') and 'a' ('A') on your keyboard to increase or decrese the width of a single cell.\
 The cell must look like as close to a square as possible.\nEnter 's' ('S') when you are done:")
         val_raw = val_raw.lower()
-        if val_raw == 'a' and width > game.MAX_VAL_LEN:
+        if val_raw == 'a' and width > MAX_VAL_LEN:
             width -= 1
         elif val_raw == 'd':
             width += 1
@@ -35,9 +41,10 @@ The cell must look like as close to a square as possible.\nEnter 's' ('S') when 
     
     return width
 
+
 def display_grid(grid:list, cell_width:int, clear_console:bool=True) -> None:
-    line = f"+{'+'.join([('-' * cell_width)] * game.MAX_VAL_LEN)}+"
-    space = f"|{'|'.join([(' ' * cell_width)] * game.MAX_VAL_LEN)}|"
+    line = f"+{'+'.join([('-' * cell_width)] * MAX_VAL_LEN)}+"
+    space = f"|{'|'.join([(' ' * cell_width)] * MAX_VAL_LEN)}|"
     lines = [line]
     for row in grid:
         lines.append(space)
@@ -50,11 +57,13 @@ def display_grid(grid:list, cell_width:int, clear_console:bool=True) -> None:
     if clear_console: clear()
     print(*lines, sep='\n')
 
+
 def get_move() -> str | None:
     val_raw = input(("Use 'WASD' ('wasd') keys to swipe up, left, down, and right respectively. " +
     "Enter 'x' ('X') to exit the game: ")).lower()
-    if len(val_raw) == 1 and val_raw in game.CONTROLS:
+    if len(val_raw) == 1 and val_raw in config.CONTROLS:
         return val_raw
+
 
 def exit_game() -> None:
     print('\nBye...')
