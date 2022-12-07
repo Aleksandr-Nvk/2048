@@ -1,5 +1,5 @@
-import os
 import config
+import os
 
 MAX_VAL_STR = str(config.MAX_VAL)
 MAX_VAL_LEN = len(MAX_VAL_STR)
@@ -24,7 +24,7 @@ def display_cell(width:int) -> str:
 
 
 def get_cell_width() -> int:
-    width = 8
+    width = 10
     while True:
         clear()
         display_cell(width)
@@ -32,19 +32,19 @@ def get_cell_width() -> int:
 Use keys 'd' ('D') and 'a' ('A') on your keyboard to increase or decrese the width of a single cell.\
 The cell must look like as close to a square as possible.\nEnter 's' ('S') when you are done:")
         val_raw = val_raw.lower()
-        if val_raw == 'a' and width > MAX_VAL_LEN:
+        if val_raw == config.SHRINK_CELL and width > MAX_VAL_LEN:
             width -= 1
-        elif val_raw == 'd':
+        elif val_raw == config.EXPAND_CELL:
             width += 1
-        elif val_raw == 's':
+        elif val_raw == config.SAVE_CELL:
             break
     
     return width
 
 
-def display_grid(grid:list, cell_width:int, clear_console:bool=True) -> None:
-    line = f"+{'+'.join([('-' * cell_width)] * MAX_VAL_LEN)}+"
-    space = f"|{'|'.join([(' ' * cell_width)] * MAX_VAL_LEN)}|"
+def display_grid(grid:list, cell_width:int=config.CELL_WIDTH) -> None:
+    line = f"+{'+'.join([('-' * cell_width)] * config.GRID_DIM)}+"
+    space = f"|{'|'.join([(' ' * cell_width)] * config.GRID_DIM)}|"
     lines = [line]
     for row in grid:
         lines.append(space)
@@ -54,7 +54,6 @@ def display_grid(grid:list, cell_width:int, clear_console:bool=True) -> None:
         lines.append(space)
         lines.append(line)
 
-    if clear_console: clear()
     print(*lines, sep='\n')
 
 
@@ -65,5 +64,17 @@ def get_move() -> str | None:
         return val_raw
 
 
+def display_score(score:int) -> None:
+    print(f'SCORE: {score}')
+
+
 def exit_game() -> None:
     print('\nBye...')
+    exit()
+
+
+def win(grid):
+    clear()
+    display_grid(grid)
+    print('You won! ;-D')
+    exit_game()

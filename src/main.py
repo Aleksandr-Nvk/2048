@@ -2,15 +2,23 @@ import game
 import gui
 import config
 
-grid = game.generate_grid()
-width = gui.get_cell_width()
+def play() -> None:
+    grid = game.generate_grid()
+    config.CELL_WIDTH = gui.get_cell_width()
+    score = 0
 
-gui.clear()
-while True:
-    gui.display_grid(grid, width, clear_console=True)
-    move_key = gui.get_move()
-    if not move_key in config.CONTROLS: continue
-    move = config.CONTROLS[move_key]
-    if game.make_move(move, grid):
-        game.add_val(grid, 2)
-    if move == config.MOVE_EXIT: break
+    while True:
+        gui.clear()
+        gui.display_grid(grid)
+        gui.display_score(score)
+        move_key = gui.get_move()
+        if not move_key in config.CONTROLS: continue
+        move = config.CONTROLS[move_key]
+        was_moved, points = game.make_move(move, grid)
+        score += points
+        if was_moved:
+            game.add_random_val(grid)
+
+
+if __name__ == '__main__':
+    play()
