@@ -1,5 +1,5 @@
 GRID_DIM = 4 # dimension of the grid. 4x4 in the original version of 2048
-MAX_VAL = 8 # value which indicates victory. 2048 in the original version of 2048
+MAX_VAL = 2048 # value which indicates victory. 2048 in the original version of 2048
 
 CELL_WIDTH = 8
 
